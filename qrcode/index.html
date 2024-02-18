@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đọc File Excel trong HTML</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="/bootstrap-5.3.2-dist/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="main">
+    <div id="header">
+      <input type="file" id="excelFileInput" />
+      <button id="readExcel">Đọc Excel</button>
+    </div>
+    <div id="mbody">
+      <div id="label">
+          <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+          <div class="container">
+            <div class="row">
+              <div class="col-md-8">
+                <table>
+                  <tr>
+                    <td>lot_no:</td>
+                    <td>Tobias</td>
+                  </tr>
+                  <tr>
+                    <td>date:</td>
+                    <td>Tobias</td>
+                  </tr>
+                  <tr>
+                    <td>user:</td>
+                    <td>Tobias</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-md-4">Nội dung cột 2</div>
+            </div>
+          </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+    <script>
+        $(document).ready(function() {
+        $("#readExcel").on("click", function() {
+      // Lấy tệp Excel được chọn
+      var fileInput = document.getElementById("excelFileInput");
+      var file = fileInput.files[0];
+
+      if (file) {
+        // Sử dụng thư viện SheetJS để đọc dữ liệu từ tệp Excel
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var data = new Uint8Array(e.target.resFult);
+          var workbook = XLSX.read(data, { type: "array" });
+
+          // Lấy dữ liệu từ sheet đầu tiên (index 0)
+          var sheetName = workbook.SheetNames[0];
+          var sheet = workbook.Sheets[sheetName];
+
+          // Chuyển đổi dữ liệu sang mảng JSON
+          var jsonData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+          // Xử lý dữ liệu ở đây
+          // console.log(jsonData);
+        };
+
+        // Đọc dữ liệu từ tệp Excel
+        reader.readAsArrayBuffer(file);
+      } else {
+        alert("Vui lòng chọn tệp Excel.");
+      }
+      });
+      });
+
+  
+    </script>
+</body>
+</html>
